@@ -4,8 +4,13 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +41,24 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList <mountain> Abboberg=new ArrayList<>();
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public  boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        if(id == R.id.action_refresh){
+        new FetchData().execute();
+        Abboberg.clear();
+        return true;
+        }
+      return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -49,6 +72,16 @@ public class MainActivity extends AppCompatActivity {
         ListView myListView= (ListView) findViewById(R.id.my_listView);
 
         myListView.setAdapter(adapter);
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener()  {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText( getApplicationContext(),Abboberg.get(position).info() , Toast.LENGTH_LONG).show();
+
+            }
+
+
+        });
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{

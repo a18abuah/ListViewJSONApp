@@ -13,11 +13,11 @@ public class mountain {
      }
      public String info () {
          String str=name;
-         str+="ligger i";
+         str+="\nligger i ";
          str+=location;
-         str+="har höjden av";
+         str+="\nhar höjden av ";
          str+=Integer.toString(Height);
-         str+="meter";
+         str+="\n m ";
          return str;
      }
 
