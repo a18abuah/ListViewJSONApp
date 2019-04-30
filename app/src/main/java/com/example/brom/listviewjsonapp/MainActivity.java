@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 
 // Create a new class, Mountain, that can hold your JSON data
@@ -30,6 +33,8 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ArrayList <mountain> Abboberg=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         new FetchData().execute();
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item_textview,
+                R.id.my_item_textView, Abboberg);
+
+
+        ListView myListView= (ListView) findViewById(R.id.my_listView);
+
+        myListView.setAdapter(adapter);
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -106,8 +118,26 @@ public class MainActivity extends AppCompatActivity {
             Log.d("test1",o);
             try {
 
-                JSONArray json1 = new JSONArray(o);
-                Log.d("test2",json1.get(0).toString());
+                JSONArray jsonberg = new JSONArray(o);
+                Log.d("test2",jsonberg.get(0).toString());
+
+                for (int i = 0; i < jsonberg.length(); i++ ){
+                    JSONObject Abbo = jsonberg.getJSONObject(i);
+                    String Bergnamn = Abbo.getString("name");
+                    String Bergplats=Abbo.getString("location");
+                    int Bergslängd = Abbo.getInt("size");
+
+                    Abboberg.add(new mountain(Bergnamn,Bergplats,Bergslängd));
+
+                }
+                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.list_item_textview,
+                        R.id.my_item_textView, Abboberg);
+
+
+                ListView myListView= (ListView) findViewById(R.id.my_listView);
+
+                myListView.setAdapter(adapter);
+
 
 
             } catch (JSONException e) {
