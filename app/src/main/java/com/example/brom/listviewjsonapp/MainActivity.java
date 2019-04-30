@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        new FetchData().execute();
     }
 
     private class FetchData extends AsyncTask<Void,Void,String>{
@@ -96,6 +103,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String o) {
             super.onPostExecute(o);
+            Log.d("test1",o);
+            try {
+
+                JSONArray json1 = new JSONArray(o);
+                Log.d("test2",json1.get(0).toString());
+
+
+            } catch (JSONException e) {
+                Log.e("brom","E:"+e.getMessage());
+            }
             // This code executes after we have received our data. The String object o holds
             // the un-parsed JSON string or is null if we had an IOException during the fetch.
 
